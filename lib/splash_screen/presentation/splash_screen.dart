@@ -1,6 +1,8 @@
 import 'package:daytask/common/button/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:daytask/auth_screen/bloc/auth_bloc.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -49,7 +51,15 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Scaffold(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          Navigator.pushReplacementNamed(context, '/home');
+        } else if (state is AuthUnauthenticated || state is AuthLoggedOut) {
+          Navigator.pushReplacementNamed(context, '/auth');
+        }
+      },
+      child: Scaffold(
       appBar: AppBar(
         title: FadeTransition(
           opacity: _fadeAnimation,
@@ -86,21 +96,20 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: RichText(
-                  textAlign: TextAlign.center,
                   text: TextSpan(
                     style: TextStyle(
                       fontFamily: 'PilatExtended',
-                      fontSize: 42,
-                      fontWeight: FontWeight.w800,
+                      fontSize: 45,
+                      fontWeight: FontWeight.w600,
                       color: Theme.of(context).textTheme.bodyLarge?.color,
                       height: 1.2,
                     ),
                     children: const [
-                      TextSpan(text: 'Manage your\nTask with '),
+                      TextSpan(text: 'Manage your Task with '),
                       TextSpan(
                         text: 'DayTask',
                         style: TextStyle(
-                          color: Color(0xFFFED36A),
+                          color: Color(0xFFFED36A), fontSize: 48, fontWeight: FontWeight.w700
                         ),
                       ),
                     ],
@@ -126,6 +135,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
           ),
         ),
       ),
+    ),
     );
   }
 }
