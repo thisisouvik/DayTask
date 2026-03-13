@@ -4,9 +4,19 @@ import 'package:daytask/splash_screen/presentation/splash_screen.dart';
 import 'package:daytask/auth_screen/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await DotEnv().load();
+
+  await Supabase.initialize(
+    url: DotEnv().env['SUPABASE-URL-LINK']!,
+    anonKey: DotEnv().env['SUPABASE-ANON-KEY']!
+  );
   runApp(
     MultiBlocProvider(
       providers: [
