@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:daytask/dashboard_screen/models/task_model.dart';
-import 'package:daytask/core/theme/app_colours.dart';
 
 /// Vertical list card for Ongoing Projects section
 class OngoingTaskCard extends StatelessWidget {
@@ -11,13 +10,27 @@ class OngoingTaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? const Color(0xFF263238) : Colors.white;
+    final textColor = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
+    final subTextColor = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFF263238),
+          color: cardColor,
           borderRadius: BorderRadius.circular(16),
+          boxShadow: isDark 
+              ? [] 
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  )
+                ],
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -28,27 +41,25 @@ class OngoingTaskCard extends StatelessWidget {
                 children: [
                   Text(
                     task.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
-                      color: Colors.white,
+                      color: textColor,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     'Due on : ${_formatDate(task.dueDate)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontFamily: 'Inter',
                       fontSize: 12,
-                      color: Colors.white70,
+                      color: subTextColor,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            _CircularProgress(progress: task.progress),
           ],
         ),
       ),
@@ -57,42 +68,20 @@ class OngoingTaskCard extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     const months = [
-      '', 'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
+      '',
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
     ];
     return '${date.day} ${months[date.month]}';
-  }
-}
-
-class _CircularProgress extends StatelessWidget {
-  final int progress;
-  const _CircularProgress({required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 56,
-      height: 56,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          CircularProgressIndicator(
-            value: progress / 100,
-            strokeWidth: 3,
-            backgroundColor: Colors.white12,
-            valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-          ),
-          Text(
-            '$progress%',
-            style: const TextStyle(
-              fontFamily: 'Inter',
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
