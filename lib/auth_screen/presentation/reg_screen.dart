@@ -61,7 +61,7 @@ class _RegScreenState extends State<RegScreen> {
               children: [
                 Center(
                   child: SvgPicture.asset(
-                    'assets/images/logo/appLogo.svg',
+                    'assets/images/logo/applogo.svg',
                     height: 120, 
                   ),
                 ),

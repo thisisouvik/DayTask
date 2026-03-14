@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Center(
                 child: SvgPicture.asset(
-                  'assets/images/logo/appLogo.svg',
-                  height: 200,
+                  'assets/images/logo/applogo.svg',
+                  height: 120,
                 ),
               ),
               const SizedBox(height: 24),
@@ -130,10 +130,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                icon: const Icon(
-                  Icons.account_circle,
-                  color: Colors.white,
-                  size: 24,
+                icon: Image.asset(
+                  'assets/images/logo/google_logo.png',
+                  height: 24,
+                  width: 24,
                 ),
                 label: const Text(
                   'Google',
