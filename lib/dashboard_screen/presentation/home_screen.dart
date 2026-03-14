@@ -133,32 +133,42 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 28),
 
-                          // Completed Tasks Section
-                          SectionHeader(
-                            title: 'Completed Tasks',
-                            onSeeAll: () {},
-                          ),
-                          const SizedBox(height: 14),
+                          // If there's an error, show it here at the top instead of incorrectly under a section
+                          if (state is TaskError)
+                            Text(
+                              'Error: ${state.message}',
+                              style: const TextStyle(color: Colors.redAccent),
+                            ),
+
+                          if (state is! TaskError) ...[
+                            // Completed Tasks Section
+                            SectionHeader(
+                              title: 'Completed Tasks',
+                              onSeeAll: () {},
+                            ),
+                            const SizedBox(height: 14),
+                          ],
                         ],
                       ),
                     ),
                   ),
 
-                  _buildCompletedSection(state),
+                  if (state is! TaskError) _buildCompletedSection(state),
 
-                  // Ongoing Tasks Section
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 24, 20, 14),
-                      child: SectionHeader(
-                        title: 'Ongoing Tasks',
-                        onSeeAll: () {},
+                  if (state is! TaskError) ...[
+                    // Ongoing Tasks Section
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 24, 20, 14),
+                        child: SectionHeader(
+                          title: 'Ongoing Tasks',
+                          onSeeAll: () {},
+                        ),
                       ),
                     ),
-                  ),
-
-                  // Ongoing Task Cards
-                  _buildOngoingSection(state),
+                    // Ongoing Task Cards
+                    _buildOngoingSection(state),
+                  ],
 
                   const SliverToBoxAdapter(child: SizedBox(height: 100)),
                 ],
@@ -195,15 +205,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
     if (state is TaskError) {
-      return SliverToBoxAdapter(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            'Error: ${state.message}',
-            style: const TextStyle(color: Colors.redAccent),
-          ),
-        ),
-      );
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
     }
     if (state is TaskLoaded) {
       final completed = state.completedTasks;
