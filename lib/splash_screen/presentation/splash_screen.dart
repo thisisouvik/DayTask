@@ -59,70 +59,78 @@ class _SplashScreenState extends State<SplashScreen>
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: FadeTransition(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SafeArea(
+          child: FadeTransition(
             opacity: _fadeAnimation,
-            child: SvgPicture.asset(
-              'assets/images/logo/applogo.svg',
-              semanticsLabel: 'App Logo',
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-        ),
-        body: FadeTransition(
-          opacity: _fadeAnimation,
-          child: SlideTransition(
-            position: _slideAnimation,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 100),
-
-                Image(
-                  height: 300,
-                  image: AssetImage(
-                    isDark
-                        ? 'assets/images/splash_image/dark.png'
-                        : 'assets/images/splash_image/light.png',
-                  ),
-                  fit: BoxFit.contain,
-                ),
-
-                const SizedBox(height: 50),
-
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                        fontFamily: 'PilatExtended',
-                        fontSize: 45,
-                        fontWeight: FontWeight.w600,
-                        color: Theme.of(context).textTheme.bodyLarge?.color,
-                        height: 1.2,
-                      ),
-                      children: const [
-                        TextSpan(text: 'Manage your Task with '),
-                        TextSpan(
-                          text: 'DayTask',
-                          style: TextStyle(
-                            color: Color(0xFFFED36A),
-                            fontSize: 48,
-                            fontWeight: FontWeight.w700,
+            child: SlideTransition(
+              position: _slideAnimation,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                   const SizedBox(height: 20),
+                   FadeTransition(
+                     opacity: _fadeAnimation,
+                     child: SvgPicture.asset(
+                       'assets/images/logo/applogo.svg',
+                       semanticsLabel: 'App Logo',
+                       height: 120,
+                       fit: BoxFit.contain,
+                     ),
+                   ),
+                  Expanded(
+                    flex: 8,
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Image(
+                          image: AssetImage(
+                            isDark
+                                ? 'assets/images/splash_image/dark.png'
+                                : 'assets/images/splash_image/light.png',
                           ),
+                          fit: BoxFit.contain,
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
 
-                const Spacer(),
+                  Expanded(
+                    flex: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                fontFamily: 'PilatExtended',
+                                fontSize: 40,
+                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                height: 1.2,
+                              ),
+                              children: const [
+                                TextSpan(text: 'Manage your Task with '),
+                                TextSpan(
+                                  text: 'DayTask',
+                                  style: TextStyle(
+                                    color: Color(0xFFFED36A),
+                                    fontSize: 42,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
 
-                SizedBox(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 24.0, left: 24.0, right: 24.0),
                     child: BasicAppButton(
                       text: 'Get Started',
                       onPressed: () {
@@ -136,8 +144,8 @@ class _SplashScreenState extends State<SplashScreen>
                       height: 56,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
