@@ -41,6 +41,40 @@ class TaskDetailsScreen extends StatelessWidget {
             },
             icon: const Icon(Icons.edit_outlined),
           ),
+          IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext dialogContext) {
+                  return AlertDialog(
+                    title: const Text('Delete Task'),
+                    content: const Text(
+                      'Are you sure you want to delete this task?',
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(dialogContext),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.read<TaskBloc>().add(DeleteTask(task.id));
+                          Navigator.pop(dialogContext); // Close dialog
+                          Navigator.pop(context); // Close TaskDetailsScreen
+                        },
+                        child: const Text(
+                          'Delete',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            icon: const Icon(Icons.delete_outline),
+            color: Colors.redAccent,
+          ),
         ],
       ),
       body: BlocBuilder<TaskBloc, TaskState>(
