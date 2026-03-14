@@ -32,6 +32,7 @@ class AuthRepository {
   Future<void> signInWithGoogle() async {
     await _supabase.auth.signInWithOAuth(
       OAuthProvider.google,
+      redirectTo: 'daytask://login-callback/',
     );
   }
 

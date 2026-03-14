@@ -3,6 +3,10 @@ import 'package:daytask/core/theme/theme_cubit.dart';
 import 'package:daytask/splash_screen/presentation/splash_screen.dart';
 import 'package:daytask/auth_screen/bloc/auth_bloc.dart';
 import 'package:daytask/auth_screen/repository/auth_repository.dart';
+import 'package:daytask/auth_screen/presentation/login_screen.dart';
+import 'package:daytask/dashboard_screen/bloc/task_bloc.dart';
+import 'package:daytask/dashboard_screen/presentation/home_screen.dart';
+import 'package:daytask/dashboard_screen/repository/task_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -19,11 +23,14 @@ void main() async {
   );
   
   final authRepository = AuthRepository();
+  final taskRepository = TaskRepository();
+  
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => AuthBloc(authRepository)),
+        BlocProvider(create: (_) => AuthBloc(authRepository)..add(AuthCheckRequested())),
+        BlocProvider(create: (_) => TaskBloc(taskRepository)),
       ],
       child: const MyApp(),
     ),
@@ -42,7 +49,12 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeMode,
-          home: const SplashScreen(),
+          initialRoute: '/',
+          routes: {
+            '/': (context) => const SplashScreen(),
+            '/auth': (context) => const LoginScreen(),
+            '/home': (context) => const HomeScreen(),
+          },
         );
       },
     );

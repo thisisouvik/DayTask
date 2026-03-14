@@ -227,10 +227,10 @@ class _RegScreenState extends State<RegScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    icon: const Icon(
-                      Icons.account_circle,
-                      color: Colors.white,
-                      size: 24,
+                    icon: Image.asset(
+                      'assets/images/logo/google_logo.png',
+                      height: 24,
+                      width: 24,
                     ),
                     label: const Text(
                       'Google',
