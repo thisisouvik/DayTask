@@ -105,30 +105,26 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: const Color(0xFF263238),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Row(
-                              children: const [
-                                SizedBox(width: 12),
-                                Icon(
+                            child: const TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Search tasks',
+                                hintStyle: TextStyle(
+                                  fontFamily: 'Inter',
+                                  color: Colors.white38,
+                                  fontSize: 14,
+                                ),
+                                prefixIcon: Icon(
                                   Icons.search,
                                   color: Colors.white38,
                                   size: 20,
                                 ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                      hintText: 'Search tasks',
-                                      hintStyle: TextStyle(
-                                        fontFamily: 'Inter',
-                                        color: Colors.white38,
-                                        fontSize: 14,
-                                      ),
-                                      border: InputBorder.none,
-                                    ),
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 15,
                                 ),
-                              ],
+                              ),
+                              style: TextStyle(color: Colors.white),
                             ),
                           ),
                           const SizedBox(height: 28),
@@ -225,28 +221,12 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = completed[index];
           return Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-            child: Dismissible(
-              key: Key(task.id),
-              direction: DismissDirection.endToStart,
-              background: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(Icons.delete, color: Colors.white),
-              ),
-              onDismissed: (direction) {
-                context.read<TaskBloc>().add(DeleteTask(task.id));
-              },
-              child: CompletedTaskCard(
-                task: task,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TaskDetailsScreen(task: task),
-                  ),
+            child: CompletedTaskCard(
+              task: task,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => TaskDetailsScreen(task: task),
                 ),
               ),
             ),
@@ -276,28 +256,12 @@ class _HomeScreenState extends State<HomeScreen> {
           final task = ongoing[index];
           return Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-            child: Dismissible(
-              key: Key(task.id),
-              direction: DismissDirection.endToStart,
-              background: Container(
-                alignment: Alignment.centerRight,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(Icons.delete, color: Colors.white),
-              ),
-              onDismissed: (direction) {
-                context.read<TaskBloc>().add(DeleteTask(task.id));
-              },
-              child: OngoingTaskCard(
-                task: task,
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TaskDetailsScreen(task: task),
-                  ),
+            child: OngoingTaskCard(
+              task: task,
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => TaskDetailsScreen(task: task),
                 ),
               ),
             ),

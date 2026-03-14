@@ -16,8 +16,6 @@ class CompletedTaskCard extends StatelessWidget {
     final borderColor = AppColors.primary;
     final textColor =
         Theme.of(context).textTheme.bodyLarge?.color ?? Colors.black;
-    final subTextColor =
-        Theme.of(context).textTheme.bodyMedium?.color ?? Colors.black54;
 
     return GestureDetector(
       onTap: onTap,
@@ -57,55 +55,27 @@ class CompletedTaskCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text(
-                    'Due on : ${_formatDate(task.dueDate)}',
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      fontSize: 12,
-                      color: subTextColor,
-                    ),
+                  Row(
+                    children: [
+                      Icon(Icons.check_circle, color: borderColor, size: 16),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Completed',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: isDark ? borderColor : AppColors.primaryDark,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ),
-            const SizedBox(width: 12),
-            Column(
-              children: [
-                Icon(Icons.check_circle, color: borderColor, size: 24),
-                const SizedBox(height: 4),
-                Text(
-                  'Completed',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: isDark ? borderColor : AppColors.primaryDark,
-                  ),
-                ),
-              ],
             ),
           ],
         ),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    const months = [
-      '',
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return '${date.day} ${months[date.month]}';
   }
 }
