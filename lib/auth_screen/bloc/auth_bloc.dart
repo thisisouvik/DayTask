@@ -11,10 +11,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 
   AuthBloc(this.authRepository) : super(AuthInitial()) {
+    on<AuthCheckRequested>(_onAuthCheck);
     on<AuthLoginRequested>(_onAuthLogin);
     on<AuthRegisterRequested>(_onAuthRegister);
     on<GoogleSighInRequested>(_onGoogleSignIn);
     on<AuthSighoutRequested>(_onAuthSignOut);
+  }
+
+  FutureOr<void> _onAuthCheck(
+    AuthCheckRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    final user = authRepository.getCurrentUser();
+    if (user != null) {
+      emit(AuthAuthenticated(user.id));
+    } else {
+      emit(AuthUnauthenticated());
+    }
   }
 
   FutureOr<void> _onAuthLogin(
