@@ -11,14 +11,14 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final authRepository = AuthRepository();
-
-  await DotEnv().load();
+  await dotenv.load(fileName: '.env');
 
   await Supabase.initialize(
-    url: DotEnv().env['SUPABASE-URL-LINK']!,
-    anonKey: DotEnv().env['SUPABASE-ANON-KEY']!
+    url: dotenv.env['SUPABASE-URL-LINK']!,
+    anonKey: dotenv.env['SUPABASE-ANON-KEY']!,
   );
+  
+  final authRepository = AuthRepository();
   runApp(
     MultiBlocProvider(
       providers: [
