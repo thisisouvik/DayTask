@@ -1,11 +1,8 @@
 import 'package:daytask/auth_screen/models/auth_models.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthRepository {
   final _supabase = Supabase.instance.client;
-  final _googleauth = GoogleSignIn.instance;
-  bool _isGoogleInitialized = false;
 
   Future<void> signInWithEmail({
     required String email,
@@ -33,28 +30,13 @@ class AuthRepository {
   }
 
   Future<void> signInWithGoogle() async {
-    if (!_isGoogleInitialized) {
-      await _googleauth.initialize();
-      _isGoogleInitialized = true;
-    }
-
-    final googleUser = await _googleauth.authenticate();
-
-    final googleAuth = googleUser.authentication;
-
-    final response = await _supabase.auth.signInWithIdToken(
-      provider: OAuthProvider.google,
-      idToken: googleAuth.idToken!,
+    await _supabase.auth.signInWithOAuth(
+      OAuthProvider.google,
     );
-
-    if (response.session == null) {
-      throw Exception('Sign-in failed, Retry after some time');
-    }
   }
 
   Future<void> signOut() async {
     await _supabase.auth.signOut();
-    await _googleauth.signOut();
   }
 
   AuthModels? getCurrentUser() {
