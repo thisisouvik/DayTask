@@ -54,8 +54,6 @@ class _SplashScreenState extends State<SplashScreen>
       listener: (context, state) {
         if (state is AuthAuthenticated) {
           Navigator.pushReplacementNamed(context, '/home');
-        } else if (state is AuthUnauthenticated || state is AuthLoggedOut) {
-          Navigator.pushReplacementNamed(context, '/auth');
         }
       },
       child: Scaffold(
@@ -68,16 +66,16 @@ class _SplashScreenState extends State<SplashScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   const SizedBox(height: 20),
-                   FadeTransition(
-                     opacity: _fadeAnimation,
-                     child: SvgPicture.asset(
-                       'assets/images/logo/applogo.svg',
-                       semanticsLabel: 'App Logo',
-                       height: 120,
-                       fit: BoxFit.contain,
-                     ),
-                   ),
+                  const SizedBox(height: 20),
+                  FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: SvgPicture.asset(
+                      'assets/images/logo/applogo.svg',
+                      semanticsLabel: 'App Logo',
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   Expanded(
                     flex: 8,
                     child: Center(
@@ -108,7 +106,9 @@ class _SplashScreenState extends State<SplashScreen>
                                 fontFamily: 'PilatExtended',
                                 fontSize: 40,
                                 fontWeight: FontWeight.w600,
-                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                color: Theme.of(
+                                  context,
+                                ).textTheme.bodyLarge?.color,
                                 height: 1.2,
                               ),
                               children: const [
@@ -130,7 +130,11 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0, left: 24.0, right: 24.0),
+                    padding: const EdgeInsets.only(
+                      bottom: 24.0,
+                      left: 24.0,
+                      right: 24.0,
+                    ),
                     child: BasicAppButton(
                       text: 'Get Started',
                       onPressed: () {

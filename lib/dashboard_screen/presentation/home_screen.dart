@@ -144,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  SliverToBoxAdapter(child: _buildCompletedSection(state)),
+                  _buildCompletedSection(state),
 
                   // Ongoing Tasks Section
                   SliverToBoxAdapter(
@@ -187,41 +187,43 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCompletedSection(TaskState state) {
     if (state is TaskLoading || state is TaskInitial) {
-      return const SizedBox(
-        height: 180,
-        child: Center(child: CircularProgressIndicator()),
+      return const SliverToBoxAdapter(
+        child: SizedBox(
+          height: 180,
+          child: Center(child: CircularProgressIndicator()),
+        ),
       );
     }
     if (state is TaskError) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Text(
-          'Error: ${state.message}',
-          style: const TextStyle(color: Colors.redAccent),
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Text(
+            'Error: ${state.message}',
+            style: const TextStyle(color: Colors.redAccent),
+          ),
         ),
       );
     }
     if (state is TaskLoaded) {
       final completed = state.completedTasks;
       if (completed.isEmpty) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: Text(
-            'No completed tasks yet.',
-            style: TextStyle(color: Colors.white54),
+        return const SliverToBoxAdapter(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              'No completed tasks yet.',
+              style: TextStyle(color: Colors.white54),
+            ),
           ),
         );
       }
-      return SizedBox(
-        height: 200,
-        child: ListView.separated(
-          scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          itemCount: completed.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 14),
-          itemBuilder: (context, index) {
-            final task = completed[index];
-            return CompletedTaskCard(
+      return SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          final task = completed[index];
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+            child: CompletedTaskCard(
               task: task,
               onTap: () => Navigator.push(
                 context,
@@ -229,12 +231,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (_) => TaskDetailsScreen(task: task),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        }, childCount: completed.length),
       );
     }
-    return const SizedBox.shrink();
+    return const SliverToBoxAdapter(child: SizedBox.shrink());
   }
 
   Widget _buildOngoingSection(TaskState state) {

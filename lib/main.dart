@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: '.env');
@@ -21,15 +20,17 @@ void main() async {
     url: dotenv.env['SUPABASE-URL-LINK']!,
     anonKey: dotenv.env['SUPABASE-ANON-KEY']!,
   );
-  
+
   final authRepository = AuthRepository();
   final taskRepository = TaskRepository();
-  
+
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => AuthBloc(authRepository)..add(AuthCheckRequested())),
+        BlocProvider(
+          create: (_) => AuthBloc(authRepository)..add(AuthCheckRequested()),
+        ),
         BlocProvider(create: (_) => TaskBloc(taskRepository)),
       ],
       child: const MyApp(),
@@ -44,14 +45,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeMode>(
       builder: (context, themeMode) {
+        final isAuth = Supabase.instance.client.auth.currentSession != null;
+
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: themeMode,
-          initialRoute: '/',
+          home: isAuth ? const HomeScreen() : const SplashScreen(),
           routes: {
-            '/': (context) => const SplashScreen(),
             '/auth': (context) => const LoginScreen(),
             '/home': (context) => const HomeScreen(),
           },
