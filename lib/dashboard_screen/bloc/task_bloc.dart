@@ -17,6 +17,8 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
     on<AddTask>(_onAddTask);
     on<UpdateTaskProgress>(_onUpdateTaskProgress);
     on<ToggleSubTask>(_onToggleSubTask);
+    on<AddSubTask>(_onAddSubTask);
+    on<UpdateTask>(_onUpdateTask);
     on<DeleteTask>(_onDeleteTask);
   }
 
@@ -72,7 +74,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   ) async {
     if (state is TaskLoaded) {
       final current = state as TaskLoaded;
-      final task = current.tasks.firstWhere((t) => t.id == event.taskId);
+      final task = current.tasks.firstWhere((t) => t.id == event.taskId, orElse: () => throw Exception('Task not found'));
       final updated = List<SubTask>.from(task.subTasks);
       updated[event.subTaskIndex] =
           updated[event.subTaskIndex].copyWith(isCompleted: event.isCompleted);
@@ -86,6 +88,49 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         'progress': progress,
         'status': status,
       });
+    }
+  }
+
+  Future<void> _onAddSubTask(
+    AddSubTask event,
+    Emitter<TaskState> emit,
+  ) async {
+    if (state is TaskLoaded) {
+      final current = state as TaskLoaded;
+      try {
+        final task = current.tasks.firstWhere((t) => t.id == event.taskId);
+        final updated = List<SubTask>.from(task.subTasks);
+        updated.add(SubTask(title: event.subTaskTitle, isCompleted: false, id: ''));
+        
+        final completedCount = updated.where((s) => s.isCompleted).length;
+        final progress = updated.isEmpty
+            ? 0
+            : ((completedCount / updated.length) * 100).round();
+        final status = progress == 100 ? 'completed' : 'ongoing';
+
+        await taskRepository.updateTask(event.taskId, {
+          'sub_tasks': updated.map((s) => s.toJson()).toList(),
+          'progress': progress,
+          'status': status,
+        });
+      } catch (e) {
+        emit(TaskError(e.toString()));
+      }
+    }
+  }
+
+  Future<void> _onUpdateTask(
+    UpdateTask event,
+    Emitter<TaskState> emit,
+  ) async {
+    try {
+      await taskRepository.updateTask(event.taskId, {
+        'title': event.title,
+        'description': event.description,
+        'due_date': event.dueDate.toIso8601String(),
+      });
+    } catch (e) {
+      emit(TaskError(e.toString()));
     }
   }
 

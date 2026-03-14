@@ -42,6 +42,25 @@ class ToggleSubTask extends TaskEvent {
   });
 }
 
+class AddSubTask extends TaskEvent {
+  final String taskId;
+  final String subTaskTitle;
+  AddSubTask({required this.taskId, required this.subTaskTitle});
+}
+
+class UpdateTask extends TaskEvent {
+  final String taskId;
+  final String title;
+  final String description;
+  final DateTime dueDate;
+  UpdateTask({
+    required this.taskId,
+    required this.title,
+    required this.description,
+    required this.dueDate,
+  });
+}
+
 class DeleteTask extends TaskEvent {
   final String taskId;
   DeleteTask(this.taskId);
