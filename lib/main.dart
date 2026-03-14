@@ -2,6 +2,7 @@ import 'package:daytask/core/theme/app_theme.dart';
 import 'package:daytask/core/theme/theme_cubit.dart';
 import 'package:daytask/splash_screen/presentation/splash_screen.dart';
 import 'package:daytask/auth_screen/bloc/auth_bloc.dart';
+import 'package:daytask/auth_screen/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -10,6 +11,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final authRepository = AuthRepository();
 
   await DotEnv().load();
 
@@ -21,7 +23,7 @@ void main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeCubit()),
-        BlocProvider(create: (_) => AuthBloc()),
+        BlocProvider(create: (_) => AuthBloc(authRepository)),
       ],
       child: const MyApp(),
     ),
