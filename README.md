@@ -301,7 +301,7 @@ Follow these steps to run DayTask locally on your machine.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/daytask.git
+git clone https://github.com/thisisouvik/daytask.git
 
 # 2. Navigate to the project directory
 cd daytask
