@@ -310,9 +310,9 @@ cd daytask
 flutter pub get
 
 # 4. Set up your Supabase credentials
-#    Open lib/core/constants/supabase_constants.dart and add your keys:
-#    const supabaseUrl = 'YOUR_SUPABASE_URL';
-#    const supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+#    Create .env file and add your keys:
+#    SUPABASE_URL = 'YOUR_SUPABASE_URL';
+#    SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
 # 5. Run the app
 flutter run
